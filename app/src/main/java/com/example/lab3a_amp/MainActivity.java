@@ -11,8 +11,17 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.math.BigDecimal;
 
 public class MainActivity extends AppCompatActivity {
+
+    public String NumberScreen;
+    public BigDecimal lhs;
+    public String operator;
+    public BigDecimal rhs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +38,33 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        NumberScreen = "0";
+    }
+
+    public void CalButtononClick(View v){
+
+        String buttonText = ((Button) v) .getText().toString();
+
+        if (buttonText.equals("C")) {
+            NumberScreen = "0";
+            TextView t = (TextView) findViewById(R.id.textView);
+            t.setText(String.valueOf(NumberScreen));
+        }
+        else if (NumberScreen.equals("0")) {
+            if (!buttonText.equals("=")){
+                NumberScreen = buttonText;
+                TextView t = (TextView) findViewById(R.id.textView);
+                t.setText(String.valueOf(NumberScreen));
+                lhs = new BigDecimal(NumberScreen);
+
+            }
+        }
+        else if (!buttonText.equals("=")) {
+            NumberScreen = NumberScreen + buttonText;
+            TextView t = (TextView) findViewById(R.id.textView);
+            t.setText(String.valueOf(NumberScreen));
+        }
     }
 
     @Override
