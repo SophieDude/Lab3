@@ -19,9 +19,10 @@ import java.math.BigDecimal;
 public class MainActivity extends AppCompatActivity {
 
     public String NumberScreen;
-    public BigDecimal lhs;
-    public String operator;
-    public BigDecimal rhs;
+    public BigDecimal lhs = null;
+    public String operator = null;
+    public BigDecimal rhs = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +52,35 @@ public class MainActivity extends AppCompatActivity {
             TextView t = (TextView) findViewById(R.id.textView);
             t.setText(String.valueOf(NumberScreen));
         }
-        else if (NumberScreen.equals("0")) {
-            if (!buttonText.equals("=")){
-                NumberScreen = buttonText;
+
+        switch(buttonText) {
+            case "+":
+                operator = buttonText;
+                lhs = new BigDecimal(NumberScreen);
+                break;
+            case "-":
+                operator = buttonText;
+                lhs = new BigDecimal(NumberScreen);
+                break;
+            case "\u00D7":
+                operator = buttonText;
+                lhs = new BigDecimal(NumberScreen);
+                break;
+            case "\u00F7":
+                operator = buttonText;
+                lhs = new BigDecimal(NumberScreen);
+                break;
+            default:
+                if (NumberScreen.equals("0")){
+                    NumberScreen = buttonText;
+                }
+                else {
+                    NumberScreen = NumberScreen + buttonText;
+                }
                 TextView t = (TextView) findViewById(R.id.textView);
                 t.setText(String.valueOf(NumberScreen));
-                lhs = new BigDecimal(NumberScreen);
+                break;
 
-            }
-        }
-        else if (!buttonText.equals("=")) {
-            NumberScreen = NumberScreen + buttonText;
-            TextView t = (TextView) findViewById(R.id.textView);
-            t.setText(String.valueOf(NumberScreen));
         }
     }
 
