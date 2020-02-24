@@ -22,7 +22,14 @@ public class MainActivity extends AppCompatActivity {
     public BigDecimal lhs = null;
     public String operator = null;
     public BigDecimal rhs = null;
+    public BigDecimal result = null;
+    public Operator currentOperator;
+    public String NewNumber;
 
+    private enum Operator {
+
+        ADD,SUBTRACT,MULTIPLY,DIVIDE,MODULUS;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,47 +48,142 @@ public class MainActivity extends AppCompatActivity {
         });
 
         NumberScreen = "0";
+        TextView t = (TextView) findViewById(R.id.textView);
+        t.setText(String.valueOf(NumberScreen));
+        NewNumber = "True";
     }
 
     public void CalButtononClick(View v){
 
         String buttonText = ((Button) v) .getText().toString();
 
-        if (buttonText.equals("C")) {
-            NumberScreen = "0";
-            TextView t = (TextView) findViewById(R.id.textView);
-            t.setText(String.valueOf(NumberScreen));
-        }
+        TextView t = (TextView) findViewById(R.id.textView);
 
         switch(buttonText) {
             case "+":
-                operator = buttonText;
-                lhs = new BigDecimal(NumberScreen);
-                break;
+                if (lhs == null) {
+                    currentOperator = Operator.ADD;
+                    lhs = new BigDecimal(NumberScreen);
+                    NewNumber = "True";
+                    break;
+                }
+                else {
+                    rhs = new BigDecimal(NumberScreen);
+                    t.setText(String.valueOf(NumberScreen));
+                    evaluateExpression();
+                    lhs = new BigDecimal(NumberScreen);
+                    currentOperator = Operator.ADD;
+                    NewNumber = "True";
+                    break;
+                }
             case "-":
-                operator = buttonText;
-                lhs = new BigDecimal(NumberScreen);
-                break;
+                if (lhs == null) {
+                    currentOperator = Operator.SUBTRACT;
+                    lhs = new BigDecimal(NumberScreen);
+                    NewNumber = "True";
+                    break;
+                }
+                else {
+                    rhs = new BigDecimal(NumberScreen);
+                    t.setText(String.valueOf(NumberScreen));
+                    evaluateExpression();
+                    lhs = new BigDecimal(NumberScreen);
+                    currentOperator = Operator.SUBTRACT;
+                    NewNumber = "True";
+                    break;
+                }
             case "\u00D7":
-                operator = buttonText;
-                lhs = new BigDecimal(NumberScreen);
-                break;
+                if (lhs == null) {
+                    currentOperator = Operator.MULTIPLY;
+                    lhs = new BigDecimal(NumberScreen);
+                    NewNumber = "True";
+                    break;
+                }
+                else {
+                    rhs = new BigDecimal(NumberScreen);
+                    t.setText(String.valueOf(NumberScreen));
+                    evaluateExpression();
+                    lhs = new BigDecimal(NumberScreen);
+                    currentOperator = Operator.MULTIPLY;
+                    NewNumber = "True";
+                    break;
+                }
             case "\u00F7":
-                operator = buttonText;
+                if (lhs == null) {
+                    currentOperator = Operator.DIVIDE;
+                    lhs = new BigDecimal(NumberScreen);
+                    NewNumber = "True";
+                    break;
+                }
+                else {
+                    rhs = new BigDecimal(NumberScreen);
+                    t.setText(String.valueOf(NumberScreen));
+                    evaluateExpression();
+                    lhs = new BigDecimal(NumberScreen);
+                    currentOperator = Operator.DIVIDE;
+                    NewNumber = "True";
+                    break;
+                }
+            case "%":
                 lhs = new BigDecimal(NumberScreen);
+                currentOperator = Operator.MODULUS;
+                evaluateExpression();
+                NumberScreen = result.toString();
+                t.setText(String.valueOf(NumberScreen));
+                NewNumber = "True";
+                break;
+            case "C":
+                NumberScreen = "0";
+                t.setText(String.valueOf(NumberScreen));
+                lhs.equals(null);
+                rhs.equals(null);
+                NewNumber = "True";
+                break;
+            case "=":
+                rhs = new BigDecimal(NumberScreen);
+                evaluateExpression();
+                NumberScreen = result.toString();
+                t.setText(String.valueOf(NumberScreen));
+                NewNumber = "True";
                 break;
             default:
-                if (NumberScreen.equals("0")){
+                if (NewNumber.equals("True")){
                     NumberScreen = buttonText;
+                    NewNumber = "False";
                 }
                 else {
                     NumberScreen = NumberScreen + buttonText;
                 }
-                TextView t = (TextView) findViewById(R.id.textView);
                 t.setText(String.valueOf(NumberScreen));
                 break;
 
         }
+    }
+
+    private void evaluateExpression() {
+        switch(currentOperator) {
+            case ADD:
+                result = lhs.add(rhs);
+                lhs = result;
+                break;
+            case SUBTRACT:
+                result = lhs.subtract(rhs);
+                lhs = result;
+                break;
+            case MULTIPLY:
+                result = lhs.multiply(rhs);
+                lhs = result;
+                break;
+            case DIVIDE:
+                result = lhs.divide(rhs);
+                lhs = result;
+                break;
+            case MODULUS:
+                result = lhs.remainder(rhs);
+                lhs = result;
+                break;
+        }
+
     }
 
     @Override

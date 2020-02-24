@@ -15,7 +15,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:text="@string/_0"
+        android:text=""
         android:textAlignment="textEnd"
         android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
