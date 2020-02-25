@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public BigDecimal result = null;
     public Operator currentOperator;
     public String NewNumber;
+    public boolean addDecimal;
 
     private enum Operator {
 
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                     rhs = new BigDecimal(NumberScreen);
                     t.setText(String.valueOf(NumberScreen));
                     evaluateExpression();
+                    NumberScreen = result.toString();
                     lhs = new BigDecimal(NumberScreen);
                     currentOperator = Operator.ADD;
                     NewNumber = "True";
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     rhs = new BigDecimal(NumberScreen);
                     t.setText(String.valueOf(NumberScreen));
                     evaluateExpression();
+                    NumberScreen = result.toString();
                     lhs = new BigDecimal(NumberScreen);
                     currentOperator = Operator.SUBTRACT;
                     NewNumber = "True";
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     rhs = new BigDecimal(NumberScreen);
                     t.setText(String.valueOf(NumberScreen));
                     evaluateExpression();
+                    NumberScreen = result.toString();
                     lhs = new BigDecimal(NumberScreen);
                     currentOperator = Operator.MULTIPLY;
                     NewNumber = "True";
@@ -119,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     rhs = new BigDecimal(NumberScreen);
                     t.setText(String.valueOf(NumberScreen));
                     evaluateExpression();
+                    NumberScreen = result.toString();
                     lhs = new BigDecimal(NumberScreen);
                     currentOperator = Operator.DIVIDE;
                     NewNumber = "True";
@@ -131,6 +136,38 @@ public class MainActivity extends AppCompatActivity {
                 NumberScreen = result.toString();
                 t.setText(String.valueOf(NumberScreen));
                 NewNumber = "True";
+                break;
+            case "\u221A":
+                double current = Double.parseDouble(NumberScreen);
+                double squareroot = Math.pow(current, 0.5);
+                NumberScreen = String.valueOf(squareroot);
+                t.setText(String.valueOf(NumberScreen));
+                if (rhs == null) {
+                    lhs = new BigDecimal(NumberScreen);
+                }
+                else {
+                    rhs = new BigDecimal(NumberScreen);
+                }
+                break;
+            case "\u00B1":
+                NumberScreen = ((new BigDecimal(NumberScreen)).negate().toString());
+                if (rhs == null) {
+                    lhs = new BigDecimal(NumberScreen);
+                }
+                else {
+                    rhs = new BigDecimal(NumberScreen);
+                }
+                t.setText(String.valueOf(NumberScreen));
+                break;
+            case ".":
+                addDecimal();
+                if (rhs == null) {
+                    lhs = new BigDecimal(NumberScreen);
+                }
+                else {
+                    rhs = new BigDecimal(NumberScreen);
+                }
+                t.setText(String.valueOf(NumberScreen));
                 break;
             case "C":
                 NumberScreen = "0";
@@ -152,6 +189,11 @@ public class MainActivity extends AppCompatActivity {
                     NewNumber = "False";
                 }
                 else {
+                    if (addDecimal) {
+                        NumberScreen = NumberScreen.concat(".");
+                        addDecimal = false;
+                    }
+
                     NumberScreen = NumberScreen + buttonText;
                 }
                 t.setText(String.valueOf(NumberScreen));
@@ -160,7 +202,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void addDecimal() {
+
+        if (!NumberScreen.contains(".")){
+
+            addDecimal = true;
+            if (NewNumber.equals("True")){
+                NumberScreen = "0";
+            }
+        }
+
+    }
+
     private void evaluateExpression() {
+        if (lhs == null) {
+            lhs = new BigDecimal(NumberScreen);
+        }
+        if (rhs == null) {
+            rhs = new BigDecimal(NumberScreen);
+        }
         switch(currentOperator) {
             case ADD:
                 result = lhs.add(rhs);
@@ -181,6 +241,8 @@ public class MainActivity extends AppCompatActivity {
             case MODULUS:
                 result = lhs.remainder(rhs);
                 lhs = result;
+                break;
+            default:
                 break;
         }
 
